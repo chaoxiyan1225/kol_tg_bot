@@ -133,7 +133,7 @@ def collect_valid_tweets(allTweets, fromTime):
                 newTweet = filter_tweet(tweet, user)
                 if newTweet:
                     retTweets.append(newTweet)
-
+            logger.warning(f"【step】2: user {userId} tweets match count : {len(retTweets)} , from time: {fromTime}") 
         except Exception as e:
             logger.error(f"[step]2 error happen : {str(e)}")
         with tweets_lock:
