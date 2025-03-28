@@ -206,7 +206,7 @@ def query_formart_tweet_md()->List:
     for tw in tws:
         twText = _truncate_tweet_(tw['text'])
         mdStr = f'''
-                New Tweet from @{tw['user_name']}
+                🐦 New Tweet from @{tw['user_name']}
                 <br>
                 {twText}
                 <br>
