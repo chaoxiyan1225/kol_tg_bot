@@ -79,6 +79,7 @@ def filter_tweet(tweet, user):
                   "like_count":tweet.public_metrics['like_count'],
                    "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),  
                    "user_name":user.username},
+                   "user_url":user.url,
         "is_valid": True,
         "priority": priority_score
     }
@@ -206,13 +207,14 @@ def query_formart_tweet_md()->List:
     for tw in tws:
         twText = _truncate_tweet_(tw['text'])
         mdStr = f'''
-                🐦 New Tweet from @{tw['user_name']}
+                🐦 New Tweet from [@{tw['user_name']}]({tw['user_url']})
                 <br>
                 {twText}
                 <br>
                 ❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
                 <br>
                 🕜 {tw['created_at']}
+                <br>
                 📎 [View on Twitter]({tw['url']})
                 '''
         formatTws.append(mdStr)
