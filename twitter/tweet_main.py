@@ -86,7 +86,7 @@ def filter_tweet(tweet, user):
     return {
         "tweet": {"retweet_count":tweet.public_metrics['retweet_count'], "text":tweet.text,
                    "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),  
-                   "user_name":user.name},
+                   "user_name":user.username},
         "is_valid": True,
         "priority": priority_score
     }
@@ -111,11 +111,11 @@ def get_userIds():
                 data = json.load(file)
 
         except json.JSONDecodeError:
-            logger.error(f"{TWEETS_KOL_NAMES} 文件内容不是合法的 JSON 格式")
+            logger.error(f"{TWEETS_KOL_NAMES} not right JSON file")
             return None
         user_names = data['user_names']
-        
         response = client.get_users(usernames=user_names)
+        logger.warning(f"get users : {response}")
         return response.data
 
 def collect_valid_tweets(allTweets, fromTime):
@@ -174,11 +174,11 @@ def rename_file(source: str, target: str) -> None:
     try:
         if os.path.exists(CURRENT_TWEETS):
            os.replace(source, target)
-           logger.warning(f"文件 {source} 已重命名为 {target}（覆盖成功）")
+           logger.warning(f"file {source}  rename to: {target} success")
     except FileNotFoundError:
-        logger.error(f"错误：源文件 {source} 不存在")
+        logger.error(f"error: {source}  not exist")
     except PermissionError:
-        logger.error(f"错误：权限不足，无法操作 {source} 或 {target}")
+        logger.error(f"error: permission deny: {source} or {target}")
 
 def get_tweets_list():
     if  os.path.exists(CURRENT_TWEETS):
@@ -187,11 +187,11 @@ def get_tweets_list():
                 data = json.load(file)
 
         except json.JSONDecodeError:
-            logger.error(f"{CURRENT_TWEETS} 文件内容不是合法的 JSON 格式")
+            logger.error(f"error:{CURRENT_TWEETS} not right JSON")
             return None
 
         if not isinstance(data, list):
-            logger.error(f"{CURRENT_TWEETS} JSON 根节点不是列表")
+            logger.error(f"error:{CURRENT_TWEETS} JSON  root list not list ")
             return None
 
         return data
@@ -200,14 +200,19 @@ def get_tweets_list():
             with open(BEFORE_TWEETS, 'r', encoding='utf-8') as file:
                 data = json.load(file)
         except json.JSONDecodeError:
-            logger.error(f"{BEFORE_TWEETS} 文件内容不是合法的 JSON 格式")
+            logger.error(f"error:{BEFORE_TWEETS} not right JSON ")
             return None
 
         if not isinstance(data, list):
-            logger.error(f"{BEFORE_TWEETS} JSON 根节点不是列表")
+            logger.error(f"error:{BEFORE_TWEETS} JSON not root list")
             return None
 
         return data
+
+def truncate_tweet(text, max_length=3500, ellipsis="..."):
+    if len(text) > max_length:
+        return text[:max_length - len(ellipsis)] + ellipsis
+    return text
 
 def generate_tweet_list():
     # matchUsers = filter_all_users()
@@ -234,11 +239,11 @@ def generate_tweet_list():
 
     logger.warning(f"write count {len(resultList)} data to json file")
     with open(CURRENT_TWEETS, "a+") as file:
-        file.write(f"{json.dumps(resultList)}")
+        file.write(f"{json.dumps(resultList, indent=4, sort_keys=True, default=str)}")
 
     file.close()
-
     logger.warning(f"【step】5 write tweet json file, finish, wait another cycle")
+    clean_logfiles()
 
 # if __name__ == "__main__":
 
