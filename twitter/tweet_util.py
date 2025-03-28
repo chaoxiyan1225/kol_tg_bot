@@ -13,11 +13,13 @@ import subprocess
 import re
 import threading
 from threading import Timer
+import time 
+LOG_FILE_CLEAN_SECONDS = 60 * 60 * 24 * 7
 
 __strCurrentDir__ = os.path.abspath(os.path.dirname(__file__))
 __strModuleDir__ = os.path.dirname(__strCurrentDir__)
 
-timeBefore = 3000  # 分钟
+timeBefore = 30  # 分钟
 def InitLogger(logFile, logLevel):
     logger = logging.getLogger()
     fileHandler = logging.FileHandler(logFile)
@@ -160,7 +162,19 @@ def contains_ca(text):
         return  True
     
     return False
-    
+
+def clean_logfiles():
+   for root, dir, files in os.walk("./"):
+      for file in files:
+         if ".log" not in file:
+            continue
+         
+         full_path = os.path.join(root, file)
+         mtime = os.stat(full_path).st_mtime
+         nowS = time.time()
+         if nowS - mtime > LOG_FILE_CLEAN_SECONDS:
+            os.remove(full_path)
+   return 
 def get_isoTime():
     now = datetime.now(timezone.utc)
     # 减去30分钟
