@@ -9,12 +9,12 @@ from twitter.tweet_main import *
 main_router = Router()
 @main_router.message(CommandStart())
 async def command_start(message: Message, state: FSMContext) -> None:
-    await message.answer("Hi there! Welcome to FortuneX's Solana Trading Bot!", reply_markup=main_menu_keyboard)
+    await message.answer("tweeter start feed back test.")
 
 @main_router.message(Command("kol_tweet_feed"))
-async def command_show_wallet_menu(message: Message, state: FSMContext) -> None:
+async def command_kol_tweet_feed(message: Message, state: FSMContext) -> None:
         # tweets = generate_tweet_list()
         # if len(tweets) > 0:
         #     for tweet in tweets:
         #         await message.answer(tweet)
-        await message.answer("tweeter  feed back test.")
+        await message.answer("tweeter feed back test.")
