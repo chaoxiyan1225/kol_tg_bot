@@ -15,10 +15,10 @@ multitasking.set_max_threads(1)
 tweets_lock = threading.Lock()
 
 REFRESH_PERIOD = 60 * 30  # 30分钟
-
-CURRENT_TWEETS="./current_tweets.json"
-BEFORE_TWEETS="./before_tweets.json"
-TWEETS_KOL_NAMES="./tweet_kols.json"
+CUR_DIR = os.getcwd()
+CURRENT_TWEETS=CUR_DIR+"/twitter/current_tweets.json"
+BEFORE_TWEETS=CUR_DIR+"/twitter/before_tweets.json"
+TWEETS_KOL_NAMES=CUR_DIR+"/twitter/tweet_kols.json"
 
 tweet_fields = [
   "article",
