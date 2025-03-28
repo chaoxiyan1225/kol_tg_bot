@@ -20,38 +20,6 @@ CURRENT_TWEETS=CUR_DIR+"/twitter/current_tweets.json"
 BEFORE_TWEETS=CUR_DIR+"/twitter/before_tweets.json"
 TWEETS_KOL_NAMES=CUR_DIR+"/twitter/tweet_kols.json"
 
-tweet_fields = [
-  "article",
-  "attachments",
-  "author_id",
-  "card_uri",
-  "community_id",
-  "context_annotations",
-  "conversation_id",
-  "created_at",
-  "display_text_range",
-  "edit_controls",
-  "edit_history_tweet_ids",
-  "entities",
-  "geo",
-  "id",
-  "in_reply_to_user_id",
-  "lang",
-  "media_metadata",
-  "non_public_metrics",
-  "note_tweet",
-  "organic_metrics",
-  "possibly_sensitive",
-  "promoted_metrics",
-  "public_metrics",
-  "referenced_tweets",
-  "reply_settings",
-  "scopes",
-  "source",
-  "text",
-  "withheld"
-]
-
 bearer_token = "AAAAAAAAAAAAAAAAAAAAAFBjzwEAAAAAJyI7zTy6vf9LglJLs7qt27JfaRw%3DEI1jfO0HpKzUMIUuAL7XzjB2M1yvTdGmoMxcVNMgxvSAYb13jO"
 client = tweepy.Client(bearer_token, wait_on_rate_limit=True)
 USERS = None
