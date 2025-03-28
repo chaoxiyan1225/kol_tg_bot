@@ -19,7 +19,7 @@ async def main():
 
     commands = [
         types.BotCommand(command="start", description="启动机器人"),
-        types.BotCommand(command="show_wallet_menu", description="显示钱包菜单"),
+        types.BotCommand(command="kol_tweet_feed", description="获取kOL tweets"),
     ]
     await bot.set_my_commands(commands)
 
