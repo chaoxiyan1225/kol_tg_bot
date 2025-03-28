@@ -44,15 +44,17 @@ def filter_tweet(tweet, user):
     # 返回结果:优先级分数越高越靠前
     return {
         "tweet": {
-                  "retweet_count":tweet.public_metrics['retweet_count'], "text":tweet.text,
+                  "retweet_count":tweet.public_metrics['retweet_count'],
+                  "text":tweet.text,
                   "like_count":tweet.public_metrics['like_count'],
-                   "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),  
+                   "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),
                    "user_name":user.username,
                    "user_url":user.url
-                 }
+                },
         "is_valid": True,
         "priority": priority_score
     }
+    
 def filter_all_users():
     retUsers = []
     try:
