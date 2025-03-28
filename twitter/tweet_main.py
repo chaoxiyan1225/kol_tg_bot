@@ -73,18 +73,10 @@ def filter_tweet(tweet, user):
     if  priority_score == 0:
         return None
 
-
-    # for tweet in response.data:
-    #     print(tweet.public_metrics['retweet_count'])
-    #     print("------------")
-    #     print(tweet.text)
-    #     print("------------")
-    #     print(tweet.created_at)
-    #     print("https://twitter.com/twitter/statuses/"+str(tweet.id))
-    #     print(tweet.public_metrics['like_count'])
     # 返回结果:优先级分数越高越靠前
     return {
         "tweet": {"retweet_count":tweet.public_metrics['retweet_count'], "text":tweet.text,
+                  "like_count":tweet.public_metrics['like_count'],
                    "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),  
                    "user_name":user.username},
         "is_valid": True,
@@ -142,16 +134,6 @@ def collect_valid_tweets(allTweets, fromTime):
         logger.warning(f"【step】2: Collect user {userId} end")
 
     # response = client.get_users_tweets(user_id, tweet_fields=["public_metrics", "created_at", "article"])
-
-    # # By default, only the ID and text fields of each Tweet will be returned
-    # for tweet in response.data:
-    #     print(tweet.public_metrics['retweet_count'])
-    #     print("------------")
-    #     print(tweet.text)
-    #     print("------------")
-    #     print(tweet.created_at)
-    #     print("https://twitter.com/twitter/statuses/"+str(tweet.id))
-    #     print(tweet.public_metrics['like_count'])
     
     logger.warning("【step】2: Collect tweets start")
 
@@ -209,11 +191,34 @@ def get_tweets_list():
 
         return data
 
-def truncate_tweet(text, max_length=3500, ellipsis="..."):
+def _truncate_tweet_(text, max_length=3500, ellipsis="..."):
     if len(text) > max_length:
         return text[:max_length - len(ellipsis)] + ellipsis
     return text
 
+def query_formart_tweet_md()->List:
+    tws = get_tweets_list()
+    if tws == None or len(tws) == 0:
+        logger.warning(f"find no tweets from users, please check, and return")
+        return []
+    
+    formatTws = []
+    for tw in tws:
+        twText = _truncate_tweet_(tw['text'])
+        mdStr = f'''
+                New Tweet from @{tw['user_name']}
+                <br>
+                {twText}
+                <br>
+                ❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
+                <br>
+                🕜 {tw['created_at']}
+                📎 [View on Twitter]({tw['url']})
+                '''
+        formatTws.append(mdStr)
+
+    return formatTws
+    
 def generate_tweet_list():
     # matchUsers = filter_all_users()
     # if len(matchUsers) == 0:
