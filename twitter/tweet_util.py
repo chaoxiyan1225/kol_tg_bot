@@ -19,7 +19,7 @@ LOG_FILE_CLEAN_SECONDS = 60 * 60 * 24 * 7
 __strCurrentDir__ = os.path.abspath(os.path.dirname(__file__))
 __strModuleDir__ = os.path.dirname(__strCurrentDir__)
 
-timeBefore = 30  # 分钟
+timeBefore = 300  # 分钟
 def InitLogger(logFile, logLevel):
     logger = logging.getLogger()
     fileHandler = logging.FileHandler(logFile)
