@@ -79,7 +79,7 @@ def get_userIds():
             logger.error(f"{TWEETS_KOL_NAMES} not right JSON file")
             return None
         user_names = data['user_names']
-        response = client.get_users(usernames=user_names)
+        response = client.get_users(usernames=user_names, user_fields=["username", "url"])
         logger.warning(f"get users : {response}")
         return response.data
 
