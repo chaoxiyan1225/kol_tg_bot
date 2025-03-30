@@ -9,10 +9,13 @@ import _thread
 import multitasking, threading # 用于多线程操作
 import os
 import json
+from aiogram.enums import ParseMode
+import asyncio
 
 multitasking.set_max_threads(1)
 
 tweets_lock = threading.Lock()
+
 
 REFRESH_PERIOD = 60 * 30  # 30分钟
 CUR_DIR = os.getcwd()
@@ -46,6 +49,7 @@ def filter_tweet(tweet, user):
         "tweet": {
                   "retweet_count":tweet.public_metrics['retweet_count'],
                   "text":tweet.text,
+                  "id":str(tweet.id),
                   "like_count":tweet.public_metrics['like_count'],
                    "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),
                    "user_name":user.username,
@@ -169,7 +173,9 @@ def _truncate_tweet_(text, max_length=3500, ellipsis="..."):
         return text[:max_length - len(ellipsis)] + ellipsis
     return text
 
-def query_formart_tweet_md()->List:
+def query_formart_tweet_md(chatId)->List:
+    # add chatId
+    add_tg_user(chatId)
     tws = get_tweets_list()
     if tws == None or len(tws) == 0:
         logger.warning(f"find no tweets from users, please check, and return")
@@ -190,6 +196,50 @@ def query_formart_tweet_md()->List:
 
     return formatTws
 
+def remove_duplicat(targetTweets):
+    beforTweets =  get_tweets_list()
+
+    if beforTweets == None or len(beforTweets) == 0:
+        logger.warning(f"beforTweets is empty, and return")
+        return
+    
+    resultTweets = []
+    for nt in targetTweets:
+        is_need = True
+        for ot in beforTweets:
+            if nt['id'].lower() == ot['id'].lower():
+                logger.warning(f"find duplicate tweet, and remove it")
+                is_need = False
+                break
+
+        if is_need:
+            resultTweets.append(nt)
+
+    return resultTweets
+
+async def push_tweets_to_users():
+    if not BOT:
+        logger.error(f"push tweet to user, but bot is not init, exit")
+        return
+    
+    logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
+    tweets = query_formart_tweet_md(None)
+
+    for user_id in ACTIVE_USERS.copy():  # 使用副本避免迭代修改
+        for tw in tweets:
+            try:
+                await BOT.send_message(
+                    chat_id=user_id,
+                    text=tw,
+                    parse_mode=ParseMode.MARKDOWN
+                )
+            except Exception as e:
+                logging.error(f"push tweet error userID: {user_id}: {e}")
+
+            #无论成功失败都得间隔5s再发送
+            await asyncio.sleep(5)
+
+    logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)} finish")
 def generate_tweet_list():
     # matchUsers = filter_all_users()
     # if len(matchUsers) == 0:
@@ -209,15 +259,17 @@ def generate_tweet_list():
 
     rename_file(CURRENT_TWEETS, BEFORE_TWEETS)
 
-    resultList = []
-    for tweet in sortedTweets:
-        resultList.append(tweet["tweet"])
+    resultList = remove_duplicat(sortedTweets)
 
-    logger.warning(f"write count {len(resultList)} data to json file")
+    logger.warning(f"write new  tweet count: {len(resultList)} data to json file")
     with open(CURRENT_TWEETS, "a+") as file:
         file.write(f"{json.dumps(resultList, indent=4, sort_keys=True, default=str)}")
 
     file.close()
+
+    #主动推送下新的消息给用户
+    push_tweets_to_users()
+
     logger.warning(f"【step】5 write tweet json file, finish, wait another cycle")
     clean_logfiles()
 
