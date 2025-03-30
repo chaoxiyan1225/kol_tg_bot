@@ -201,7 +201,7 @@ def remove_duplicat(targetTweets):
 
     if beforTweets == None or len(beforTweets) == 0:
         logger.warning(f"beforTweets is empty, and return")
-        return
+        return targetTweets
     
     resultTweets = []
     for nt in targetTweets:
