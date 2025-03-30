@@ -1,5 +1,5 @@
 # TELEGRAM_BOT_TOKEN = "7726083529:AAHK0f8laiB9KJuq09gcYdNXmTTXPNAZQB8"
-TG_URL = "https://t.me/nagini_bot"
-TELEGRAM_BOT_TOKEN = "7162043064:AAFjZMqZSddyk1dRajqrIHHFdrisgHES4_U"
+TG_URL = "https://t.me/yytf332858_bot"
+TELEGRAM_BOT_TOKEN = "8182166663:AAHPWFblOR8LOh-0dNNi0DBpTpqBm8jTDfw"
 RPC_URL = "https://api.mainnet-beta.solana.com"
 AI_API_KEY = "sk-TJif0c2b03e98fe768213a54ea7e175ffe83ad6380afrRHS"
