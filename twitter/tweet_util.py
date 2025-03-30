@@ -158,6 +158,7 @@ def add_tg_user(chatId):
         return 
     
     with set_lock:
+       logger.warning(f"add user: {chatId} to set")
        ACTIVE_USERS.add(chatId)
 
 # # --------------- 测试用例 ---------------
