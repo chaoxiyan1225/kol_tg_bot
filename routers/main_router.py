@@ -9,6 +9,11 @@ from menus import *
 from twitter.tweet_main import *
 
 main_router = Router()
+
+#@main_router.message()
+#async def debug_all_messages(message: Message):
+#    print(f"收到原始消息: {message.text}")
+
 @main_router.message(CommandStart())
 async def command_start(message: Message, state: FSMContext) -> None:
         tweets = query_formart_tweet_md()
