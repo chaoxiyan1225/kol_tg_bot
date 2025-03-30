@@ -242,7 +242,7 @@ async def push_tweets_to_users():
                 await bot.send_message(
                     chat_id=user_id,
                     text=tw,
-                    parse_mode=ParseMode.MARKDOWN
+                    parse_mode=ParseMode.HTML
                 )
             except Exception as e:
                 logging.error(f"push tweet error userID: {user_id}: {e}")
