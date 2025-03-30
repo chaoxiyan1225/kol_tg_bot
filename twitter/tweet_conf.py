@@ -19,6 +19,9 @@ def set_bot(bot):
     global BOT
     BOT = bot
 
+def get_bot():
+    global BOT
+    return BOT
 
 # 核心条件：Crypto 相关 KOL 发的 Tweet 或 Quote 评论
 # 目标用户：识别与“Crypto”领域相关的 KOL（关键意见领袖）。判断依据：
