@@ -11,7 +11,6 @@ import os
 import json
 from aiogram.enums import ParseMode
 import asyncio
-
 multitasking.set_max_threads(1)
 
 tweets_lock = threading.Lock()
@@ -154,7 +153,7 @@ def get_tweets_list():
             return None
 
         return data
-    
+
     if  os.path.exists(BEFORE_TWEETS):
         try:
             with open(BEFORE_TWEETS, 'r', encoding='utf-8') as file:
@@ -168,9 +167,9 @@ def get_tweets_list():
             return None
 
         return data
-    
+
     return None
-    
+
 def _truncate_tweet_(text, max_length=3500, ellipsis="..."):
     if len(text) > max_length:
         return text[:max_length - len(ellipsis)] + ellipsis
@@ -186,31 +185,31 @@ def query_formart_tweet_md(chatId)->List:
 
     formatTws = []
     for tw in tws:
-        twText = _truncate_tweet_(tw['text'])
+        twText =(tw['text'])
         mdStr = f'''
-                🐦 New Tweet from [@{tw['user_name']}]({tw['user_url']})
+                🐦 New Tweet from <a href="{tw['user_url']}">@{tw['user_name']}]</a>
 {twText}
                 \n
 ❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
 🕜 {tw['created_at']}
-📎 [View on Twitter]({tw['url']})
+📎 <a href="{tw['url']}">View on Twitter</a>
                 '''
         formatTws.append(mdStr)
 
     return formatTws
-    
+
 def remove_duplicat(targetTweets):
     beforTweets =  get_tweets_list()
     resultTweets = []
 
     if beforTweets == None or len(beforTweets) == 0:
         logger.warning(f"beforTweets is empty, and return")
-        
+
         for tw in targetTweets:
             resultTweets.append(tw['tweet'])
 
         return resultTweets
-    
+
     for nt in targetTweets:
         is_need = True
         for ot in beforTweets:
@@ -228,7 +227,7 @@ async def push_tweets_to_users():
     if not BOT:
         logger.error(f"push tweet to user, but bot is not init, exit")
         return
-    
+
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
     tweets = query_formart_tweet_md(None)
 
@@ -273,7 +272,7 @@ def generate_tweet_list():
         file.write(f"{json.dumps(resultList, indent=4, sort_keys=True, default=str)}")
 
     file.close()
-    
+
     logger.warning(f"【step】5 write tweet json file, finish")
 
     #主动推送下新的消息给用户
