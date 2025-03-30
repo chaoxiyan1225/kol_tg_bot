@@ -12,7 +12,7 @@ from twitter.tweet_conf import *
 
 
 async def main():
-    bot = Bot(token=TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+    bot = Bot(token=TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     dp = Dispatcher(bot=bot)
     set_bot(bot)
     dp.include_router(main_router)
