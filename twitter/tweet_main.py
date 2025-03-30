@@ -233,6 +233,10 @@ async def push_tweets_to_users():
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
     tweets = query_formart_tweet_md(None)
 
+    if len(tweets) == 0:
+        logger.warning(f"no tweet to push to user, exit")
+        return
+
     for user_id in ACTIVE_USERS.copy():  # 使用副本避免迭代修改
         for tw in tweets:
             try:
