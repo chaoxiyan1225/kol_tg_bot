@@ -12,7 +12,7 @@ from config import TELEGRAM_BOT_TOKEN
 
 async def main():
     bot = Bot(token=TELEGRAM_BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
-    dp = Dispatcher()
+    dp = Dispatcher(bot=bot)
     dp.include_router(main_router)
     # dp.include_router(menu_router)
     # dp.include_router(state_router)
@@ -21,12 +21,11 @@ async def main():
         types.BotCommand(command="start", description="启动机器人"),
         types.BotCommand(command="kol_tweet_feed", description="获取kOL tweets"),
     ]
+    print("now start poling")
     await bot.set_my_commands(commands)
-
     await dp.start_polling(bot)
 
-
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    print("now bot start running, wait for request")
+    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     asyncio.run(main())
-    print("now bot start running")
