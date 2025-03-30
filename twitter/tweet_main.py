@@ -229,14 +229,15 @@ def remove_duplicat(targetTweets):
     
 def sync_push_tweets_to_users():
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
-    tweets = query_formart_tweet_md(None)
-    if  len(tweets) == 0:
-        logger.warning(f"no tweet to push to user, exit")
-        return
+    # tweets = query_formart_tweet_md(None)
+    # if  len(tweets) == 0:
+    #     logger.warning(f"no tweet to push to user, exit")
+    #     return
 
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
-
-    for user_id in ACTIVE_USERS.copy():  # 使用副本避免迭代修改
+    tweets = ["眼抄袭","孙涛","眼科"]
+    #for user_id in ACTIVE_USERS.copy():  #
+    for user_id in [7833207962]:  #
         for tw in tweets:
             try:
                 PUSH_BOT.send_message(
@@ -280,11 +281,14 @@ async def async_push_tweets_to_users():
             await asyncio.sleep(5)
 
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)} finish")
+    
 def generate_tweet_list():
     # matchUsers = filter_all_users()
     # if len(matchUsers) == 0:
     #     print("【step】1: No match users, exit")
     #     exit(1)
+
+    sync_push_tweets_to_users()
 
     fromTime = get_isoTime()
     allTweets = []
@@ -314,7 +318,7 @@ def generate_tweet_list():
 
     #主动推送下新的消息给用户
     logger.warning(f"【step】6 start push tweet to users")
-    asyncio.run(push_tweets_to_users())
+    asyncio.run(async_push_tweets_to_users())
     logger.warning(f"【step】6 finish push tweet to users")
     
     clean_logfiles()
