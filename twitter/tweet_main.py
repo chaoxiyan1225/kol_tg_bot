@@ -17,9 +17,6 @@ import requests
 
 multitasking.set_max_threads(1)
 tweets_lock = threading.Lock()
-# 初始化机器人
-PUSH_BOT = Bot(token=TELEGRAM_BOT_TOKEN)
-
 
 REFRESH_PERIOD = 60 * 30  # 30分钟
 CUR_DIR = os.getcwd()
@@ -230,15 +227,13 @@ def remove_duplicat(targetTweets):
     
 def sync_push_tweets_to_users():
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
-    # tweets = query_formart_tweet_md(None)
-    # if  len(tweets) == 0:
-    #     logger.warning(f"no tweet to push to user, exit")
-    #     return
+    tweets = query_formart_tweet_md(None)
+    if  len(tweets) == 0:
+        logger.warning(f"no tweet to push to user, exit")
+        return
 
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
-    tweets = ["眼抄袭","孙涛","眼科"]
-    #for user_id in ACTIVE_USERS.copy():  #
-    for user_id in [7833207962]:  #
+    for user_id in ACTIVE_USERS.copy():  #
         for tw in tweets:
             try:
                 url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
@@ -292,9 +287,7 @@ def generate_tweet_list():
     # if len(matchUsers) == 0:
     #     print("【step】1: No match users, exit")
     #     exit(1)
-
-    sync_push_tweets_to_users()
-
+    
     fromTime = get_isoTime()
     allTweets = []
     collect_valid_tweets(allTweets, fromTime)
@@ -323,7 +316,8 @@ def generate_tweet_list():
 
     #主动推送下新的消息给用户
     logger.warning(f"【step】6 start push tweet to users")
-    asyncio.run(async_push_tweets_to_users())
+    # asyncio.run(async_push_tweets_to_users())
+    sync_push_tweets_to_users()
     logger.warning(f"【step】6 finish push tweet to users")
     
     clean_logfiles()
