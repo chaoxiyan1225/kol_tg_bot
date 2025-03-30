@@ -54,7 +54,7 @@ def filter_tweet(tweet, user):
         "is_valid": True,
         "priority": priority_score
     }
-    
+
 def filter_all_users():
     retUsers = []
     try:
@@ -93,12 +93,12 @@ def collect_valid_tweets(allTweets, fromTime):
             if response == None or  response.data == None:
                 logger.warning(f"【step】2: user {userId} tweets count is 0 , from time: {fromTime}")
                 return
-            logger.warning(f"【step】2: user {userId} tweets count : {len(response.data)} , from time: {fromTime}") 
+            logger.warning(f"【step】2: user {userId} tweets count : {len(response.data)} , from time: {fromTime}")
             for tweet in response.data:
                 newTweet = filter_tweet(tweet, user)
                 if newTweet:
                     retTweets.append(newTweet)
-            logger.warning(f"【step】2: user {userId} tweets match count : {len(retTweets)} , from time: {fromTime}") 
+            logger.warning(f"【step】2: user {userId} tweets match count : {len(retTweets)} , from time: {fromTime}")
         except Exception as e:
             logger.error(f"[step]2 error happen : {str(e)}")
         with tweets_lock:
@@ -107,21 +107,21 @@ def collect_valid_tweets(allTweets, fromTime):
         logger.warning(f"【step】2: Collect user {userId} end")
 
     # response = client.get_users_tweets(user_id, tweet_fields=["public_metrics", "created_at", "article"])
-    
+
     logger.warning("【step】2: Collect tweets start")
 
     allUsers = get_userIds()
     if allUsers == None:
         logger.error(f"get all user error, exit")
         return
-    
+
     for user in allUsers:
         get_user_tweets(user)
         time.sleep(2)
 
     multitasking.wait_for_tasks()
     logger.warning("【step】2: Collect tweets finish")
-    
+
 def sort_tweets(allTweets):
     sorted_tweets = sorted(allTweets, key=lambda x: x["priority"], reverse=True)
     return sorted_tweets
@@ -174,25 +174,22 @@ def query_formart_tweet_md()->List:
     if tws == None or len(tws) == 0:
         logger.warning(f"find no tweets from users, please check, and return")
         return []
-    
+
     formatTws = []
     for tw in tws:
         twText = _truncate_tweet_(tw['text'])
         mdStr = f'''
                 🐦 New Tweet from [@{tw['user_name']}]({tw['user_url']})
-                <br>
-                {twText}
-                <br>
-                ❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
-                <br>
-                🕜 {tw['created_at']}
-                <br>
-                📎 [View on Twitter]({tw['url']})
+{twText}
+                \n
+❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
+🕜 {tw['created_at']}
+📎 [View on Twitter]({tw['url']})
                 '''
         formatTws.append(mdStr)
 
     return formatTws
-    
+
 def generate_tweet_list():
     # matchUsers = filter_all_users()
     # if len(matchUsers) == 0:
@@ -205,8 +202,8 @@ def generate_tweet_list():
     if len(allTweets) == 0:
         logger.warning(f"find no tweets from users, please check, and return")
         return
-    
-    logger.warning(f"【step】3 after filter tweets count is :{len(allTweets)}  fromTime: {fromTime}") 
+
+    logger.warning(f"【step】3 after filter tweets count is :{len(allTweets)}  fromTime: {fromTime}")
     logger.warning(f"【step】4: sorted tweets start fromTime: {fromTime}")
     sortedTweets = sort_tweets(allTweets)
 
