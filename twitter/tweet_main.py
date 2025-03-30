@@ -53,7 +53,7 @@ def filter_tweet(tweet, user):
                   "like_count":tweet.public_metrics['like_count'],
                    "created_at":tweet.created_at, "url": "https://twitter.com/twitter/statuses/"+str(tweet.id),
                    "user_name":user.username,
-                   "user_url":user.url
+                   "user_url":"https://x.com/"+user.username
                 },
         "is_valid": True,
         "priority": priority_score
