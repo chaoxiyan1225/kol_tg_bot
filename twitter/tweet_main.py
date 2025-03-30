@@ -154,7 +154,8 @@ def get_tweets_list():
             return None
 
         return data
-    else:
+    
+    if  os.path.exists(BEFORE_TWEETS):
         try:
             with open(BEFORE_TWEETS, 'r', encoding='utf-8') as file:
                 data = json.load(file)
@@ -167,7 +168,9 @@ def get_tweets_list():
             return None
 
         return data
-
+    
+    return None
+    
 def _truncate_tweet_(text, max_length=3500, ellipsis="..."):
     if len(text) > max_length:
         return text[:max_length - len(ellipsis)] + ellipsis
