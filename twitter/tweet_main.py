@@ -268,16 +268,18 @@ def generate_tweet_list():
 
     resultList = remove_duplicat(sortedTweets)
 
-    logger.warning(f"write new  tweet count: {len(resultList)} data to json file")
+    logger.warning(f"【step】5:write new tweets count: {len(resultList)} data to json file")
     with open(CURRENT_TWEETS, "a+") as file:
         file.write(f"{json.dumps(resultList, indent=4, sort_keys=True, default=str)}")
 
     file.close()
+    
+    logger.warning(f"【step】5 write tweet json file, finish")
 
     #主动推送下新的消息给用户
+    logger.warning(f"【step】6 start push tweet to users")
     push_tweets_to_users()
-
-    logger.warning(f"【step】5 write tweet json file, finish, wait another cycle")
+    logger.warning(f"【step】6 finish push tweet to users")
     clean_logfiles()
 
 # if __name__ == "__main__":
