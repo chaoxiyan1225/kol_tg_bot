@@ -155,49 +155,14 @@ def get_isoTime():
 
 def add_tg_user(chatId):
     if not chatId:
-        return 
-    
+        return
+
     with set_lock:
        logger.warning(f"add user: {chatId} to set")
        ACTIVE_USERS.add(chatId)
 
 # # --------------- 测试用例 ---------------
 # if __name__ == "__main__":
-#     test_text = """
-#     我的地址是 0x52908400098527886E0F703057D2E41EE7，
-#     无效地址示例：0xinvalid1234567890abcdef1234567890abcdef12345，
-#     另一个有效地址 0xde709f210230622092106031471562902fb77，
-#     以及错误长度的 0xabc。
-#     """
-
-#     # 检查是否存在有效地址
-#     print("文本包含有效地址:", contains_ethereum_address(test_text))  # 输出 True
-
-#     # 提取所有有效地址
-#     # valid_addresses = extract_ethereum_addresses(test_text)
-#     # print("有效地址列表:", valid_addresses)
-#     # # 输出: ['0x52908400098527886E0F7030069857D2E4169EE7', '0xde709f2102306220921060314715629080e2fb77']
-
-#     test_text = """
-#     有效地址：
-#     - H4RFkXiXZvjA2k4k1ZJq8Jvq8JvQmJvQmJvQmJvQmJvQmJvQmJvQmJvQmJvQm (虚构示例)
-#     - 4wB4p9jqbd3gZgVvF6WQ7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd
-
-#     无效地址示例：
-#     - 0xabc... (以太坊格式)
-#     - AAAAABBBBBCCCCCAAAAABBBBBCCCCCAAAAABBBBB (连续重复)
-#     - 1111111111111111111111111111111111111111 (全数字)
-#     - ThisIsJustARandomTextWith44CharactersLongButInvalid!!
-#     """
-
-#     test_text = """
-#     真实地址示例：
-#     - 83astBRguLMdt2h5U1Tpdq5tjFoJ6noeGwaY3mDLVcri (随机生成测试地址)
-#     - 83astBRguLMdt2h5U1Tpdq5tjFoJ6noeGwaY3mDLVcriewwwewe (虚构)
-#     - H4RFkXiXZvjA2k4k1ZJq8Jvq8JvQmJvQmJvQmJvmww (虚构示例)
-#     - 4wB4p9jqbd3gZgVvF6WQ7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd
-#     """
-
 #     addresses = contain_solana_addresses(test_text)
 #     print("检测到的有效地址:", addresses)
 #     # 输出: [] （因示例地址为虚构，实际应替换为真实地址测试）
