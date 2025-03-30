@@ -11,9 +11,13 @@ import os
 import json
 from aiogram.enums import ParseMode
 import asyncio
-multitasking.set_max_threads(1)
+from config import *
+from telegram import Bot
 
+multitasking.set_max_threads(1)
 tweets_lock = threading.Lock()
+# 初始化机器人
+PUSH_BOT = Bot(token=TELEGRAM_BOT_TOKEN)
 
 
 REFRESH_PERIOD = 60 * 30  # 30分钟
@@ -222,8 +226,33 @@ def remove_duplicat(targetTweets):
             resultTweets.append(nt['tweet'])
 
     return resultTweets
+    
+def sync_push_tweets_to_users():
+    logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
+    tweets = query_formart_tweet_md(None)
+    if  len(tweets) == 0:
+        logger.warning(f"no tweet to push to user, exit")
+        return
 
-async def push_tweets_to_users():
+    logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)}")
+
+    for user_id in ACTIVE_USERS.copy():  # 使用副本避免迭代修改
+        for tw in tweets:
+            try:
+                PUSH_BOT.send_message(
+                    chat_id=user_id,
+                    text=tw,
+                    parse_mode=ParseMode.HTML
+                )
+            except Exception as e:
+                logging.error(f"push tweet error userID: {user_id}: {e}")
+
+            #无论成功失败都得间隔5s再发送
+            time.sleep(5)
+
+    logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)} finish")
+
+async def async_push_tweets_to_users():
     bot = get_bot()
     if not bot:
         logger.error(f"push tweet to user, but bot is not init, exit")
