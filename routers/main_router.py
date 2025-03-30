@@ -23,12 +23,10 @@ async def __send_kol_messages__(message: Message, state: FSMContext) -> None:
                 await asyncio.sleep(5)
         else:
            await message.answer("start, no tweet, wait another cycle")
-
-
 @main_router.message(CommandStart())
 async def command_start(message: Message, state: FSMContext) -> None:
-    __send_kol_messages__(message, state)
+    await __send_kol_messages__(message, state)
 
 @main_router.message(Command("kol_tweet_feed"))
 async def command_kol_tweet_feed(message: Message, state: FSMContext) -> None:
-    __send_kol_messages__(message, state)
+    await __send_kol_messages__(message, state)
