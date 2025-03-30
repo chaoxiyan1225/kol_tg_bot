@@ -224,8 +224,7 @@ def remove_duplicat(targetTweets):
     return resultTweets
 
 async def push_tweets_to_users():
-
-    bot = get_bot():
+    bot = get_bot()
     if not bot:
         logger.error(f"push tweet to user, but bot is not init, exit")
         return
