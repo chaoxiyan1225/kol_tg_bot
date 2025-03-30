@@ -13,6 +13,7 @@ from aiogram.enums import ParseMode
 import asyncio
 from config import *
 from telegram import Bot
+import requests
 
 multitasking.set_max_threads(1)
 tweets_lock = threading.Lock()
@@ -240,11 +241,15 @@ def sync_push_tweets_to_users():
     for user_id in [7833207962]:  #
         for tw in tweets:
             try:
-                PUSH_BOT.send_message(
-                    chat_id=user_id,
-                    text=tw,
-                    parse_mode=ParseMode.HTML
-                )
+                url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+                payload = {
+                    "chat_id": user_id,
+                    "text": message,
+                    "parse_mode":"HTML"
+                }
+                response = requests.post(url, json=payload)
+                if response.status_code != 200:
+                    print(f"发送失败: {response.status_code}, {response.text}")
             except Exception as e:
                 logging.error(f"push tweet error userID: {user_id}: {e}")
 
