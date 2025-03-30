@@ -198,25 +198,29 @@ def query_formart_tweet_md(chatId)->List:
         formatTws.append(mdStr)
 
     return formatTws
-
+    
 def remove_duplicat(targetTweets):
     beforTweets =  get_tweets_list()
+    resultTweets = []
 
     if beforTweets == None or len(beforTweets) == 0:
         logger.warning(f"beforTweets is empty, and return")
-        return targetTweets
+        
+        for tw in targetTweets:
+            resultTweets.append(tw['tweet'])
+
+        return resultTweets
     
-    resultTweets = []
     for nt in targetTweets:
         is_need = True
         for ot in beforTweets:
-            if nt['id'].lower() == ot['id'].lower():
+            if nt['tweet']['id'].lower() == ot['id'].lower():
                 logger.warning(f"find duplicate tweet, and remove it")
                 is_need = False
                 break
 
         if is_need:
-            resultTweets.append(nt)
+            resultTweets.append(nt['tweet'])
 
     return resultTweets
 
