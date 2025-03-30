@@ -239,17 +239,20 @@ def sync_push_tweets_to_users():
                 url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
                 payload = {
                     "chat_id": user_id,
-                    "text": message,
+                    "text": tw,
                     "parse_mode":"HTML"
                 }
                 response = requests.post(url, json=payload)
                 if response.status_code != 200:
-                    print(f"发送失败: {response.status_code}, {response.text}")
+                    logger.error(f"send error {user_id}: {response.status_code}, {response.text}")
+                else:
+                    logger.warning(f"send success to: {user_id}")
+                    
             except Exception as e:
                 logging.error(f"push tweet error userID: {user_id}: {e}")
 
             #无论成功失败都得间隔5s再发送
-            time.sleep(5)
+            time.sleep(3)
 
     logger.warning(f"start push tweet to user, user count: {len(ACTIVE_USERS)} finish")
 
