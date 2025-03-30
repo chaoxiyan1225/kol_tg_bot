@@ -13,7 +13,7 @@ import subprocess
 import re
 import threading
 from threading import Timer
-import time 
+import time
 LOG_FILE_CLEAN_SECONDS = 60 * 60 * 24 * 7
 
 __strCurrentDir__ = os.path.abspath(os.path.dirname(__file__))
@@ -58,7 +58,7 @@ class Cmd:
             logger.info("Excute:%s success \n output= %s" % (self.cmd, output))
             return True, output
 
-class RepeatingTimer(Timer): 
+class RepeatingTimer(Timer):
     def run(self):
         while not self.finished.is_set():
             self.function(*self.args, **self.kwargs)
@@ -85,8 +85,8 @@ def is_crypto_kol(tweetUser, tClient):
 
     for key in bio_keys:
         if key.lower() in tweetUser.description.lower():
-            return True 
-        
+            return True
+
     response = tClient.get_users_tweets(tweetUser.id, max_results=10)
 
 # By default, only the ID and text fields of each Tweet will be returned
@@ -132,7 +132,7 @@ def contains_ethereum_address(text: str) -> bool:
 #     # 基础格式验证
 #     if not re.fullmatch(r"[1-9A-HJ-NP-Za-km-z]{44}", address):
 #         return False
-    
+
 #     # Base58解码验证
 #     try:
 #         decoded_bytes = base58.b58decode(address)
@@ -157,10 +157,10 @@ def contain_solana_addresses(text: str) -> list:
 def contains_ca(text):
     if contains_ethereum_address(text):
         return True
-    
+
     if contain_solana_addresses(text):
         return  True
-    
+
     return False
 
 def clean_logfiles():
@@ -168,13 +168,13 @@ def clean_logfiles():
       for file in files:
          if ".log" not in file:
             continue
-         
+
          full_path = os.path.join(root, file)
          mtime = os.stat(full_path).st_mtime
          nowS = time.time()
          if nowS - mtime > LOG_FILE_CLEAN_SECONDS:
             os.remove(full_path)
-   return 
+   return
 def get_isoTime():
     now = datetime.now(timezone.utc)
     # 减去30分钟
@@ -201,12 +201,12 @@ def get_isoTime():
 #     # # 输出: ['0x52908400098527886E0F7030069857D2E4169EE7', '0xde709f2102306220921060314715629080e2fb77']
 
 #     test_text = """
-#     有效地址： 
+#     有效地址：
 #     - H4RFkXiXZvjA2k4k1ZJq8Jvq8JvQmJvQmJvQmJvQmJvQmJvQmJvQmJvQmJvQm (虚构示例)
 #     - 4wB4p9jqbd3gZgVvF6WQ7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd7vq7Kd
-    
+
 #     无效地址示例：
-#     - 0xabc... (以太坊格式) 
+#     - 0xabc... (以太坊格式)
 #     - AAAAABBBBBCCCCCAAAAABBBBBCCCCCAAAAABBBBB (连续重复)
 #     - 1111111111111111111111111111111111111111 (全数字)
 #     - ThisIsJustARandomTextWith44CharactersLongButInvalid!!
