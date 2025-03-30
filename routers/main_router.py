@@ -19,6 +19,7 @@ async def __send_kol_messages__(message: Message, state: FSMContext) -> None:
         tweets = query_formart_tweet_md(user_id)
         if len(tweets) > 0:
             for tweet in tweets:
+                logger.warning(tweet)
                 await message.answer(tweet)
                 await asyncio.sleep(5)
         else:
