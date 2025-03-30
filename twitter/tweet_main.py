@@ -224,7 +224,9 @@ def remove_duplicat(targetTweets):
     return resultTweets
 
 async def push_tweets_to_users():
-    if not BOT:
+
+    bot = get_bot():
+    if not bot:
         logger.error(f"push tweet to user, but bot is not init, exit")
         return
 
@@ -234,7 +236,7 @@ async def push_tweets_to_users():
     for user_id in ACTIVE_USERS.copy():  # 使用副本避免迭代修改
         for tw in tweets:
             try:
-                await BOT.send_message(
+                await bot.send_message(
                     chat_id=user_id,
                     text=tw,
                     parse_mode=ParseMode.MARKDOWN
@@ -262,10 +264,13 @@ def generate_tweet_list():
     logger.warning(f"【step】3 after filter tweets count is :{len(allTweets)}  fromTime: {fromTime}")
     logger.warning(f"【step】4: sorted tweets start fromTime: {fromTime}")
     sortedTweets = sort_tweets(allTweets)
+    resultList = remove_duplicat(sortedTweets)
+
+    if len(resultList) == 0:
+        logger.warning(f"find no tweets after duicate from users, return")
+        return 
 
     rename_file(CURRENT_TWEETS, BEFORE_TWEETS)
-
-    resultList = remove_duplicat(sortedTweets)
 
     logger.warning(f"【step】5:write new tweets count: {len(resultList)} data to json file")
     with open(CURRENT_TWEETS, "a+") as file:
@@ -277,9 +282,9 @@ def generate_tweet_list():
 
     #主动推送下新的消息给用户
     logger.warning(f"【step】6 start push tweet to users")
-    #主动推送下新的消息给用户
     asyncio.run(push_tweets_to_users())
     logger.warning(f"【step】6 finish push tweet to users")
+    
     clean_logfiles()
 
 # if __name__ == "__main__":
