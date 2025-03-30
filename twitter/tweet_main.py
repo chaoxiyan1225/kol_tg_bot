@@ -278,7 +278,8 @@ def generate_tweet_list():
 
     #主动推送下新的消息给用户
     logger.warning(f"【step】6 start push tweet to users")
-    push_tweets_to_users()
+    #主动推送下新的消息给用户
+    asyncio.run(push_tweets_to_users())
     logger.warning(f"【step】6 finish push tweet to users")
     clean_logfiles()
 
