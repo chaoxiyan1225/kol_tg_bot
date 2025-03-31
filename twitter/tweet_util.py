@@ -10,7 +10,7 @@ import uuid
 import logging
 import subprocess
 
-import re
+import tweepy
 import threading
 from threading import Timer
 import time
@@ -22,6 +22,12 @@ __strModuleDir__ = os.path.dirname(__strCurrentDir__)
 ACTIVE_USERS = set()
 
 set_lock = threading.Lock()
+
+# 从环境变量加载 API 密钥
+TWITTER_API_KEY = '6OV3J7mdKqgf8PYHt5OUWuBxw'
+TWITTER_API_SECRET_KEY = '6L1exzDiM6NRmNxbB4Wc0wBiPACWxiRSdp86ZyyiwPWSKAeNtw'
+TWITTER_ACCESS_TOKEN = '1504333329314635778-sGTp9ZzNe31u0JTljxbQamONpjDfvA'
+TWITTER_ACCESS_TOKEN_SECRET = '7q9MdaqD6rEDw5bLEYvBHpz0hzMCq5BMeTAyC9zwUSpgz'
 
 timeBefore = 300  # 分钟
 def InitLogger(logFile, logLevel):
@@ -161,10 +167,19 @@ def add_tg_user(chatId):
        logger.warning(f"add user: {chatId} to set")
        ACTIVE_USERS.add(chatId)
 
-# # --------------- 测试用例 ---------------
-# if __name__ == "__main__":
-#     addresses = contain_solana_addresses(test_text)
-#     print("检测到的有效地址:", addresses)
-#     # 输出: [] （因示例地址为虚构，实际应替换为真实地址测试）
+# 初始化 Twitter API
+auth = tweepy.OAuth1UserHandler(
+    TWITTER_API_KEY,
+    TWITTER_API_SECRET_KEY,
+    TWITTER_ACCESS_TOKEN,
+    TWITTER_ACCESS_TOKEN_SECRET
+)
 
-#     print(get_isoTime())
+twitter_api = tweepy.API(auth)
+
+def publish_to_tweet(text):
+    try:
+        twitter_api.update_status(text)
+        logger.warning(f"now publish tweet content: {text} success")
+    except Exception as e:
+        logger.error(f"publish to tweet error:: {e}")
