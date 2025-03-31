@@ -5,7 +5,7 @@ bio_keys = ["crypto", "cryptocurrency", "blockchain", "web3", "NFT", "DeFi", "bi
 
 #crypto  web3 关键词
 Crypto_keys = ["crypto", "cryptocurrency", "bitcoin", "BTC", "ethereum", "ETH", "blockchain", "token", "NFT", "DeFi", "decentralized", "coin"]
-Web3_keys = ["web3","dapp", "dao", "metaverse", "smart", "contract", "wallet"]
+Web3_keys = ["web3","dapp", "dao", "metaverse", "smart contrac", "wallet"]
 crypto_web3_keys = Crypto_keys + Web3_keys
 
 # 美股 宏观环境关键词
