@@ -189,7 +189,7 @@ def query_formart_tweet_md(chatId)->List:
     for tw in tws:
         twText =(tw['text'])
         mdStr = f'''
-                🐦 New Tweet from <a href="{tw['user_url']}">@{tw['user_name']}]</a>
+                🐦 New Tweet from <a href="{tw['user_url']}">@{tw['user_name']}</a>
 {twText}
                 \n
 ❤ {tw['like_count']}赞| {tw['retweet_count']} 转推
